@@ -707,229 +707,27 @@ header {
 </div>
 
 <script>
-// ── PUZZLES ──────────────────────────────────────────────────────────────────
-const PUZZLES = [
-  {
-    id:1, theme:"Things with teeth", metric:"Average number of teeth (Fewest → Most)",
-    items:[
-      {id:"a",name:"Human Child",value:1,display:"20 teeth"},
-      {id:"b",name:"Adult Human",value:2,display:"32 teeth"},
-      {id:"c",name:"Dog",value:3,display:"42 teeth"},
-      {id:"d",name:"Great White Shark",value:4,display:"300 teeth"},
-      {id:"e",name:"Garden Snail",value:5,display:"14,000 teeth"}
-    ],
-    decoys:[{id:"dec1",name:"Bird",isDecoy:true},{id:"dec2",name:"Turtle",isDecoy:true}]
-  },
-  {
-    id:2, theme:"US Coins", metric:"Physical diameter (Smallest → Largest)",
-    items:[
-      {id:"a",name:"Dime",value:1,display:"0.705\""},
-      {id:"b",name:"Penny",value:2,display:"0.750\""},
-      {id:"c",name:"Nickel",value:3,display:"0.835\""},
-      {id:"d",name:"Quarter",value:4,display:"0.955\""},
-      {id:"e",name:"Half-Dollar",value:5,display:"1.205\""}
-    ],
-    decoys:[{id:"dec1",name:"Dollar Bill",isDecoy:true},{id:"dec2",name:"Credit Card",isDecoy:true}]
-  },
-  {
-    id:3, theme:"Things with a 'tail'", metric:"Alphabetical order",
-    items:[
-      {id:"a",name:"Comet",value:1,display:"C"},
-      {id:"b",name:"Dog",value:2,display:"D"},
-      {id:"c",name:"Kite",value:3,display:"K"},
-      {id:"d",name:"Monkey",value:4,display:"M"},
-      {id:"e",name:"Shirt",value:5,display:"S"}
-    ],
-    decoys:[{id:"dec1",name:"Car",isDecoy:true},{id:"dec2",name:"Building",isDecoy:true}]
-  },
-  {
-    id:4, theme:"Musical instruments", metric:"Physical size (Smallest → Largest)",
-    items:[
-      {id:"a",name:"Harmonica",value:1,display:"4\""},
-      {id:"b",name:"Flute",value:2,display:"26\""},
-      {id:"c",name:"Guitar",value:3,display:"38\""},
-      {id:"d",name:"Cello",value:4,display:"48\""},
-      {id:"e",name:"Grand Piano",value:5,display:"100\"+"}
-    ],
-    decoys:[{id:"dec1",name:"Paintbrush",isDecoy:true},{id:"dec2",name:"Microphone",isDecoy:true}]
-  },
-  {
-    id:5, theme:"Things that are hot", metric:"Temperature (Coolest → Hottest)",
-    items:[
-      {id:"a",name:"Human Body",value:1,display:"98°F"},
-      {id:"b",name:"Boiling Water",value:2,display:"212°F"},
-      {id:"c",name:"Pizza Oven",value:3,display:"800°F"},
-      {id:"d",name:"Lava",value:4,display:"2,000°F"},
-      {id:"e",name:"Sun's Surface",value:5,display:"10,000°F"}
-    ],
-    decoys:[{id:"dec1",name:"Ice Cube",isDecoy:true},{id:"dec2",name:"Liquid Nitrogen",isDecoy:true}]
-  },
-  {
-    id:6, theme:"Non-living flying things", metric:"Typical cruising altitude (Lowest → Highest)",
-    items:[
-      {id:"a",name:"Frisbee",value:1,display:"~10 ft"},
-      {id:"b",name:"Drone",value:2,display:"~400 ft"},
-      {id:"c",name:"Helicopter",value:3,display:"~10,000 ft"},
-      {id:"d",name:"Commercial Jet",value:4,display:"~35,000 ft"},
-      {id:"e",name:"Satellite",value:5,display:"1,000,000+ ft"}
-    ],
-    decoys:[{id:"dec1",name:"Ostrich",isDecoy:true},{id:"dec2",name:"Penguin",isDecoy:true}]
-  },
-  {
-    id:7, theme:"Human body parts", metric:"Quantity in a standard body (Fewest → Most)",
-    items:[
-      {id:"a",name:"Heart",value:1,display:"1"},
-      {id:"b",name:"Kidneys",value:2,display:"2"},
-      {id:"c",name:"Ribs",value:3,display:"24"},
-      {id:"d",name:"Teeth",value:4,display:"32"},
-      {id:"e",name:"Bones",value:5,display:"206"}
-    ],
-    decoys:[{id:"dec1",name:"Shoe",isDecoy:true},{id:"dec2",name:"Hat",isDecoy:true}]
-  },
-  {
-    id:8, theme:"Common sports", metric:"Players on the field per team (Fewest → Most)",
-    items:[
-      {id:"a",name:"Tennis (Singles)",value:1,display:"1 player"},
-      {id:"b",name:"Beach Volleyball",value:2,display:"2 players"},
-      {id:"c",name:"Basketball",value:3,display:"5 players"},
-      {id:"d",name:"Baseball",value:4,display:"9 players"},
-      {id:"e",name:"Soccer",value:5,display:"11 players"}
-    ],
-    decoys:[{id:"dec1",name:"Chess",isDecoy:true},{id:"dec2",name:"Poker",isDecoy:true}]
-  },
-  {
-    id:9, theme:"Things with 'rings'", metric:"Alphabetical order",
-    items:[
-      {id:"a",name:"Binder",value:1,display:"B"},
-      {id:"b",name:"Circus",value:2,display:"C"},
-      {id:"c",name:"Saturn",value:3,display:"S"},
-      {id:"d",name:"Telephone",value:4,display:"Te"},
-      {id:"e",name:"Tree",value:5,display:"Tr"}
-    ],
-    decoys:[{id:"dec1",name:"Moon",isDecoy:true},{id:"dec2",name:"Triangle",isDecoy:true}]
-  },
-  {
-    id:10, theme:"Common fruits", metric:"Average weight (Lightest → Heaviest)",
-    items:[
-      {id:"a",name:"Blueberry",value:1,display:"2g"},
-      {id:"b",name:"Strawberry",value:2,display:"12g"},
-      {id:"c",name:"Lemon",value:3,display:"100g"},
-      {id:"d",name:"Apple",value:4,display:"150g"},
-      {id:"e",name:"Watermelon",value:5,display:"9,000g+"}
-    ],
-    decoys:[{id:"dec1",name:"Potato",isDecoy:true},{id:"dec2",name:"Onion",isDecoy:true}]
-  },
-  {
-    id:11, theme:"Things associated with sleep", metric:"Alphabetical order",
-    items:[
-      {id:"a",name:"Bed",value:1,display:"B"},
-      {id:"b",name:"Blanket",value:2,display:"Bl"},
-      {id:"c",name:"Dream",value:3,display:"D"},
-      {id:"d",name:"Pillow",value:4,display:"P"},
-      {id:"e",name:"Snore",value:5,display:"S"}
-    ],
-    decoys:[{id:"dec1",name:"Coffee",isDecoy:true},{id:"dec2",name:"Sun",isDecoy:true}]
-  },
-  {
-    id:12, theme:"Palindrome words", metric:"Letter count (Shortest → Longest)",
-    items:[
-      {id:"a",name:"Wow",value:1,display:"3 letters"},
-      {id:"b",name:"Deed",value:2,display:"4 letters"},
-      {id:"c",name:"Civic",value:3,display:"5 letters"},
-      {id:"d",name:"Racecar",value:4,display:"7 letters"},
-      {id:"e",name:"Malayalam",value:5,display:"9 letters"}
-    ],
-    decoys:[{id:"dec1",name:"House",isDecoy:true},{id:"dec2",name:"Apple",isDecoy:true}]
-  },
-  {
-    id:13, theme:"Things you write with", metric:"Year invented (Oldest → Newest)",
-    items:[
-      {id:"a",name:"Charcoal",value:1,display:"Prehistoric"},
-      {id:"b",name:"Quill",value:2,display:"6th Century"},
-      {id:"c",name:"Pencil",value:3,display:"1565"},
-      {id:"d",name:"Fountain Pen",value:4,display:"1827"},
-      {id:"e",name:"Marker",value:5,display:"1953"}
-    ],
-    decoys:[{id:"dec1",name:"Keyboard",isDecoy:true},{id:"dec2",name:"Eraser",isDecoy:true}]
-  },
-  {
-    id:14, theme:"Four-legged animals", metric:"Top speed (Slowest → Fastest)",
-    items:[
-      {id:"a",name:"Tortoise",value:1,display:"0.2 mph"},
-      {id:"b",name:"Pig",value:2,display:"11 mph"},
-      {id:"c",name:"Elephant",value:3,display:"25 mph"},
-      {id:"d",name:"Horse",value:4,display:"55 mph"},
-      {id:"e",name:"Cheetah",value:5,display:"70 mph"}
-    ],
-    decoys:[{id:"dec1",name:"Snake",isDecoy:true},{id:"dec2",name:"Kangaroo",isDecoy:true}]
-  },
-  {
-    id:15, theme:"Things that hold water", metric:"Capacity (Smallest → Largest)",
-    items:[
-      {id:"a",name:"Teaspoon",value:1,display:"5 mL"},
-      {id:"b",name:"Coffee Cup",value:2,display:"240 mL"},
-      {id:"c",name:"Bucket",value:3,display:"10 L"},
-      {id:"d",name:"Bathtub",value:4,display:"150 L"},
-      {id:"e",name:"Swimming Pool",value:5,display:"40,000 L+"}
-    ],
-    decoys:[{id:"dec1",name:"Fork",isDecoy:true},{id:"dec2",name:"Towel",isDecoy:true}]
-  },
-  {
-    id:16, theme:"Modes of transportation", metric:"Number of wheels (Fewest → Most)",
-    items:[
-      {id:"a",name:"Unicycle",value:1,display:"1 wheel"},
-      {id:"b",name:"Bicycle",value:2,display:"2 wheels"},
-      {id:"c",name:"Tricycle",value:3,display:"3 wheels"},
-      {id:"d",name:"Car",value:4,display:"4 wheels"},
-      {id:"e",name:"Semi-Truck",value:5,display:"18 wheels"}
-    ],
-    decoys:[{id:"dec1",name:"Boat",isDecoy:true},{id:"dec2",name:"Helicopter",isDecoy:true}]
-  },
-  {
-    id:17, theme:"Things with keys", metric:"Number of keys (Fewest → Most)",
-    items:[
-      {id:"a",name:"Padlock",value:1,display:"1 key"},
-      {id:"b",name:"Trumpet",value:2,display:"3 keys"},
-      {id:"c",name:"Clarinet",value:3,display:"17 keys"},
-      {id:"d",name:"Piano",value:4,display:"88 keys"},
-      {id:"e",name:"Computer",value:5,display:"104 keys"}
-    ],
-    decoys:[{id:"dec1",name:"Doorbell",isDecoy:true},{id:"dec2",name:"Drum",isDecoy:true}]
-  },
-  {
-    id:18, theme:"Units of time", metric:"Duration (Shortest → Longest)",
-    items:[
-      {id:"a",name:"Second",value:1,display:"1 second"},
-      {id:"b",name:"Minute",value:2,display:"60 seconds"},
-      {id:"c",name:"Day",value:3,display:"24 hours"},
-      {id:"d",name:"Decade",value:4,display:"10 years"},
-      {id:"e",name:"Century",value:5,display:"100 years"}
-    ],
-    decoys:[{id:"dec1",name:"Lightyear",isDecoy:true},{id:"dec2",name:"Ounce",isDecoy:true}]
-  },
-  {
-    id:19, theme:"Things that melt", metric:"Melting point (Coolest → Hottest)",
-    items:[
-      {id:"a",name:"Ice Cream",value:1,display:"< 32°F"},
-      {id:"b",name:"Butter",value:2,display:"90°F"},
-      {id:"c",name:"Chocolate",value:3,display:"93°F"},
-      {id:"d",name:"Lead",value:4,display:"621°F"},
-      {id:"e",name:"Iron",value:5,display:"2,800°F"}
-    ],
-    decoys:[{id:"dec1",name:"Wood",isDecoy:true},{id:"dec2",name:"An Egg",isDecoy:true}]
-  },
-  {
-    id:20, theme:"Things with holes", metric:"Alphabetical order",
-    items:[
-      {id:"a",name:"Bowling Ball",value:1,display:"B"},
-      {id:"b",name:"Cheese",value:2,display:"C"},
-      {id:"c",name:"Donut",value:3,display:"D"},
-      {id:"d",name:"Macaroni",value:4,display:"M"},
-      {id:"e",name:"Sponge",value:5,display:"S"}
-    ],
-    decoys:[{id:"dec1",name:"Apple",isDecoy:true},{id:"dec2",name:"Baseball",isDecoy:true}]
-  }
-];
+
+const SUPABASE_URL = 'https://kfjnvbbvbcsarjgbkzhc.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_fbnA507heOBqSCsU8Fk3zA_5hRiVV-e';
+
+async function fetchTodaysPuzzle() {
+  const today = new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
+  // en-CA gives YYYY-MM-DD format which Supabase date column expects
+  
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/puzzles?publish_date=eq.${today}&select=puzzle_number,publish_date,theme,items,decoys`,
+    {
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+      }
+    }
+  );
+  const data = await res.json();
+  return data[0] || null; // returns today's puzzle or null if none exists
+}
+
 
 // ── DAILY ROTATION ────────────────────────────────────────────────────────────
 function getTodayKey() {
@@ -1479,17 +1277,28 @@ document.querySelectorAll('.modal-overlay').forEach(m => {
 });
 
 // ── BOOT ──────────────────────────────────────────────────────────────────────
-(function boot() {
-  const daily = getDailyPuzzle();
-  const saved = loadGameState();
+(async function boot() {
+  const puzzle = await fetchTodaysPuzzle();
+  
+  if (!puzzle) {
+    document.getElementById('instruction').innerHTML = 
+      '<b>No puzzle today yet.</b> Check back soon.';
+    return;
+  }
 
-  if (saved && saved.puzzle && saved.puzzle.id === daily.id) {
+  // Map Supabase shape to what initGame expects
+  const p = {
+    id: puzzle.puzzle_number,
+    theme: puzzle.theme,
+    items: puzzle.items,
+    decoys: puzzle.decoys
+  };
+
+  const saved = loadGameState();
+  if (saved && saved.puzzle && saved.puzzle.id === p.id) {
     restoreGame(saved);
-    if (saved.gameOver) {
-      // Show result but no end-card restart needed
-    }
   } else {
-    initGame(daily, true);
+    initGame(p, true);
   }
 })();
 </script>
