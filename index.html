@@ -8,449 +8,130 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0c0c0e;
-  --surface: #161619;
-  --surface2: #1e1e23;
-  --border: #2a2a32;
-  --text: #e8e4da;
-  --muted: #888;
-  --amber: #e8a020;
-  --amber-dim: #3a2808;
-  --green: #3d9a5c;
-  --green-dim: #0d2a18;
-  --yellow: #c9943a;
-  --yellow-dim: #2e2008;
-  --red: #c94040;
-  --blue: #4a8fd4;
-  --blue-dim: #0d1e35;
+  --bg: #0c0c0e; --surface: #161619; --surface2: #1e1e23; --border: #2a2a32;
+  --text: #e8e4da; --muted: #888; --amber: #e8a020; --amber-dim: #3a2808;
+  --green: #3d9a5c; --green-dim: #0d2a18; --yellow: #c9943a; --yellow-dim: #2e2008;
+  --blue: #4a8fd4; --blue-dim: #0d1e35;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: 'Space Mono', monospace;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+body { font-family: 'Space Mono', monospace; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
 
-/* HEADER */
-header {
-  width: 100%;
-  max-width: 520px;
-  padding: 16px 20px 12px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--border);
-}
-.brand {
-  font-family: 'Playfair Display', serif;
-  font-size: 26px;
-  letter-spacing: -0.5px;
-  color: var(--text);
-}
+header { width: 100%; max-width: 520px; padding: 16px 20px 12px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+.brand { font-family: 'Playfair Display', serif; font-size: 26px; letter-spacing: -0.5px; }
 .brand span { color: var(--amber); }
 .header-btns { display: flex; gap: 8px; }
-.icon-btn {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  color: var(--text);
-  width: 36px; height: 36px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  display: flex; align-items: center; justify-content: center;
-  transition: background 0.15s;
-}
+.icon-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--text); width: 36px; height: 36px; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
 .icon-btn:hover { background: var(--border); }
 
-/* MAIN */
-#game-wrap {
-  width: 100%;
-  max-width: 520px;
-  padding: 16px 20px 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
+#game-wrap { width: 100%; max-width: 520px; padding: 16px 20px 40px; display: flex; flex-direction: column; gap: 14px; }
 
-/* PUZZLE META */
-.meta-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 11px;
-  color: var(--muted);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
+.meta-row { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
 .meta-puzzle { font-weight: 700; color: var(--amber); }
-
-/* PHASE INDICATOR */
-.phase-bar {
-  display: flex;
-  gap: 6px;
-}
-.phase-pip {
-  height: 3px;
-  flex: 1;
-  border-radius: 2px;
-  background: var(--border);
-  transition: background 0.3s;
-}
+.phase-bar { display: flex; gap: 6px; }
+.phase-pip { height: 3px; flex: 1; border-radius: 2px; background: var(--border); transition: background 0.3s; }
 .phase-pip.active { background: var(--amber); }
 .phase-pip.done { background: var(--green); }
-
-/* LIVES */
-.lives-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+.lives-row { display: flex; align-items: center; justify-content: space-between; }
 .lives-dots { display: flex; gap: 5px; }
-.life-dot {
-  width: 10px; height: 10px;
-  border-radius: 50%;
-  background: var(--amber);
-  transition: all 0.3s;
-}
+.life-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--amber); transition: all 0.3s; }
 .life-dot.lost { background: var(--border); }
-.instruction {
-  font-size: 12px;
-  color: var(--muted);
-  text-align: right;
-  max-width: 260px;
-  line-height: 1.5;
-}
+.instruction { font-size: 12px; color: var(--muted); text-align: right; max-width: 260px; line-height: 1.5; }
 .instruction b { color: var(--text); font-weight: 700; }
 
-/* HISTORY */
 #history-wrap { min-height: 36px; }
-.history-row {
-  display: flex;
-  gap: 5px;
-  margin-bottom: 5px;
-}
-.hbox {
-  width: 28px; height: 28px;
-  border-radius: 5px;
-  background: var(--surface2);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px;
-  font-weight: 700;
-  transition: all 0.3s;
-}
+.history-row { display: flex; gap: 5px; margin-bottom: 5px; }
+.hbox { width: 28px; height: 28px; border-radius: 5px; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
 .hbox.correct { background: var(--green); color: #fff; }
 .hbox.close { background: var(--yellow); color: #fff; }
 .hbox.wrong { background: var(--surface2); border: 1px solid var(--border); }
 .hbox.p1-pass { background: var(--green); color: #fff; }
 .hbox.p1-fail { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); }
 
-/* BOARD */
-#board {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-#board.phase2 {
-  grid-template-columns: 1fr;
-}
-.item {
-  background: var(--surface2);
-  border: 1.5px solid var(--border);
-  border-radius: 10px;
-  padding: 16px 14px;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  user-select: none;
-  transition: all 0.15s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  line-height: 1.4;
-  min-height: 64px;
-  position: relative;
-}
-#board.phase2 .item {
-  justify-content: space-between;
-  text-align: left;
-  padding: 14px 16px;
-  min-height: 52px;
-}
+#board { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+#board.phase2 { grid-template-columns: 1fr; }
+.item { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 10px; padding: 16px 14px; font-size: 14px; font-weight: 700; cursor: pointer; user-select: none; transition: all 0.15s; display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.4; min-height: 64px; }
+#board.phase2 .item { justify-content: space-between; text-align: left; padding: 14px 16px; min-height: 52px; }
 .item:hover { border-color: var(--muted); }
-.item.sel1 {
-  border-color: var(--amber);
-  background: var(--amber-dim);
-  color: var(--amber);
-}
-.item.sel2 {
-  border-color: var(--blue);
-  background: var(--blue-dim);
-}
-.item.revealed {
-  border-color: var(--green);
-  background: var(--green-dim);
-  pointer-events: none;
-}
-.item.decoy-reveal {
-  border-color: var(--border);
-  background: var(--surface);
-  color: var(--muted);
-  text-decoration: line-through;
-  pointer-events: none;
-}
-.item-val {
-  font-size: 11px;
-  color: var(--amber);
-  font-weight: 400;
-  display: none;
-  white-space: nowrap;
-}
+.item.sel1 { border-color: var(--amber); background: var(--amber-dim); color: var(--amber); }
+.item.sel2 { border-color: var(--blue); background: var(--blue-dim); }
+.item.revealed { border-color: var(--green); background: var(--green-dim); pointer-events: none; }
+.item-val { font-size: 11px; color: var(--amber); font-weight: 400; display: none; white-space: nowrap; }
 .revealed .item-val { display: block; }
+.swap-hint { font-size: 11px; color: var(--muted); text-align: center; margin-top: -4px; }
 
-/* SWAP HINT */
-.swap-hint {
-  font-size: 11px;
-  color: var(--muted);
-  text-align: center;
-  margin-top: -4px;
-}
-
-/* SUBMIT BUTTON */
-#submit-btn {
-  background: var(--text);
-  color: var(--bg);
-  border: none;
-  border-radius: 50px;
-  padding: 16px;
-  font-family: 'Space Mono', monospace;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  cursor: pointer;
-  width: 100%;
-  transition: all 0.15s;
-}
-#submit-btn:disabled {
-  background: var(--surface2);
-  color: var(--muted);
-  cursor: not-allowed;
-}
+#submit-btn { background: var(--text); color: var(--bg); border: none; border-radius: 50px; padding: 16px; font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; width: 100%; transition: all 0.15s; }
+#submit-btn:disabled { background: var(--surface2); color: var(--muted); cursor: not-allowed; }
 #submit-btn:not(:disabled):hover { opacity: 0.85; }
 #submit-btn:not(:disabled):active { transform: scale(0.98); }
 
-/* TOAST */
-#toast {
-  position: fixed;
-  top: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--text);
-  color: var(--bg);
-  padding: 10px 20px;
-  border-radius: 6px;
-  font-family: 'Space Mono', monospace;
-  font-size: 13px;
-  font-weight: 700;
-  opacity: 0;
-  transition: opacity 0.25s;
-  pointer-events: none;
-  z-index: 999;
-  white-space: nowrap;
-}
-
-/* SHAKE */
-@keyframes shake {
-  0%,100% { transform: translateX(0); }
-  20% { transform: translateX(-6px); }
-  60% { transform: translateX(6px); }
-  80% { transform: translateX(-4px); }
-}
+#toast { position: fixed; top: 80px; left: 50%; transform: translateX(-50%); background: var(--text); color: var(--bg); padding: 10px 20px; border-radius: 6px; font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; opacity: 0; transition: opacity 0.25s; pointer-events: none; z-index: 999; white-space: nowrap; }
+@keyframes shake { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-6px); } 60% { transform: translateX(6px); } 80% { transform: translateX(-4px); } }
 .shake { animation: shake 0.4s ease; }
 
-/* MODALS */
-.modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.75);
-  z-index: 200;
-  align-items: flex-end;
-  justify-content: center;
-  padding: 20px;
-}
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 200; align-items: flex-end; justify-content: center; padding: 20px; }
 .modal-overlay.open { display: flex; }
-.modal {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  width: 100%;
-  max-width: 480px;
-  padding: 24px;
-  max-height: 85vh;
-  overflow-y: auto;
-}
-.modal-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 22px;
-  margin-bottom: 16px;
-}
-.modal-close {
-  float: right;
-  background: none;
-  border: none;
-  color: var(--muted);
-  font-size: 22px;
-  cursor: pointer;
-  line-height: 1;
-  margin-top: -2px;
-}
+.modal { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 480px; padding: 24px; max-height: 85vh; overflow-y: auto; }
+.modal-title { font-family: 'Playfair Display', serif; font-size: 22px; margin-bottom: 16px; }
+.modal-close { float: right; background: none; border: none; color: var(--muted); font-size: 22px; cursor: pointer; line-height: 1; margin-top: -2px; }
 
-/* END SCREEN (inside game) */
-#end-card {
-  display: none;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 20px;
-  text-align: center;
-  gap: 12px;
-  flex-direction: column;
-  align-items: center;
-}
+#end-card { display: none; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; text-align: center; gap: 12px; flex-direction: column; align-items: center; }
 #end-card.show { display: flex; }
-.end-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 28px;
-}
-.end-theme {
-  font-size: 12px;
-  color: var(--muted);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
+.end-title { font-family: 'Playfair Display', serif; font-size: 28px; }
+.end-theme { font-size: 12px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
 .end-theme span { color: var(--amber); }
-.stat-row {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  width: 100%;
-}
-.stat-box {
-  flex: 1;
-  background: var(--surface2);
-  border-radius: 10px;
-  padding: 12px 8px;
-  text-align: center;
-}
-.stat-num {
-  font-size: 26px;
-  font-weight: 700;
-  color: var(--amber);
-}
+.end-metric { font-size: 11px; color: var(--muted); font-style: italic; }
+.stat-row { display: flex; gap: 12px; justify-content: center; width: 100%; }
+.stat-box { flex: 1; background: var(--surface2); border-radius: 10px; padding: 12px 8px; text-align: center; }
+.stat-num { font-size: 26px; font-weight: 700; color: var(--amber); }
 .stat-label { font-size: 10px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 1px; }
-
 .countdown-wrap { width: 100%; }
 .countdown-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
-#countdown { font-size: 28px; font-weight: 700; letter-spacing: 2px; color: var(--text); }
-
-.share-btn {
-  background: var(--green);
-  color: #fff;
-  border: none;
-  border-radius: 50px;
-  padding: 14px 24px;
-  font-family: 'Space Mono', monospace;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  cursor: pointer;
-  width: 100%;
-  transition: all 0.15s;
-}
+#countdown { font-size: 28px; font-weight: 700; letter-spacing: 2px; }
+.share-btn { background: var(--green); color: #fff; border: none; border-radius: 50px; padding: 14px 24px; font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; width: 100%; transition: all 0.15s; }
 .share-btn:hover { opacity: 0.85; }
-.share-btn:active { transform: scale(0.98); }
 
-/* STATS MODAL */
-.dist-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
-  font-size: 12px;
-}
+.dist-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 12px; }
 .dist-label { width: 20px; text-align: right; color: var(--muted); }
-.dist-bar {
-  height: 20px;
-  background: var(--green);
-  border-radius: 3px;
-  min-width: 4px;
-  display: flex;
-  align-items: center;
-  padding: 0 6px;
-  font-size: 11px;
-  font-weight: 700;
-  color: #fff;
-  transition: width 0.5s;
-}
-.dist-bar.current { background: var(--amber); }
+.dist-bar { height: 20px; background: var(--green); border-radius: 3px; min-width: 4px; display: flex; align-items: center; padding: 0 6px; font-size: 11px; font-weight: 700; color: #fff; }
 
-/* HOW TO PLAY */
-.how-phase {
-  background: var(--surface2);
-  border-radius: 10px;
-  padding: 14px;
-  margin-bottom: 10px;
-  font-size: 13px;
-  line-height: 1.7;
-  color: var(--muted);
-}
-.how-phase strong { color: var(--text); display: block; margin-bottom: 4px; }
-.legend-row { display: flex; gap: 6px; margin-top: 8px; align-items: center; font-size: 12px; }
-.legend-box {
-  width: 22px; height: 22px; border-radius: 4px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px; font-weight: 700;
-}
-
-/* ARCHIVE */
-.archive-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border);
-  cursor: pointer;
-  transition: all 0.15s;
-}
+.archive-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); cursor: pointer; transition: all 0.15s; }
 .archive-item:hover { opacity: 0.7; }
 .archive-num { font-size: 13px; font-weight: 700; }
 .archive-theme { font-size: 11px; color: var(--muted); margin-top: 2px; }
 .archive-status { font-size: 18px; }
 
-/* ALREADY PLAYED */
-#already-played {
-  display: none;
-  background: var(--surface2);
-  border-radius: 10px;
-  padding: 16px;
-  text-align: center;
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.8;
-}
-#already-played.show { display: block; }
-#already-played strong { color: var(--text); display: block; font-size: 16px; margin-bottom: 4px; }
+/* HTP SLIDESHOW */
+.htp-slide { display: none; animation: slideIn 0.25s ease; }
+.htp-slide.active { display: block; }
+@keyframes slideIn { from { opacity:0; transform:translateX(14px); } to { opacity:1; transform:translateX(0); } }
+.htp-slide-num { font-size: 11px; color: var(--muted); text-align: center; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+.htp-big { font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 10px; line-height: 1.3; }
+.htp-body { font-size: 13px; color: var(--muted); line-height: 1.8; margin-bottom: 16px; }
+.htp-example { background: var(--surface2); border-radius: 10px; padding: 14px; margin-bottom: 16px; }
+.htp-example-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+.htp-items-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.htp-item { background: var(--surface); border: 1.5px solid var(--border); border-radius: 8px; padding: 10px; font-size: 12px; font-weight: 700; text-align: center; }
+.htp-item.sel { border-color: var(--amber); background: var(--amber-dim); color: var(--amber); }
+.htp-item.decoy { color: var(--muted); opacity: 0.5; }
+.htp-order-items { display: flex; flex-direction: column; gap: 6px; }
+.htp-order-item { background: var(--surface); border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
+.htp-order-item.good { border-color: var(--green); background: var(--green-dim); }
+.htp-order-item.close { border-color: var(--yellow); background: var(--yellow-dim); }
+.htp-legend { display: flex; flex-direction: column; gap: 10px; }
+.htp-legend-row { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--muted); }
+.htp-box { width: 26px; height: 26px; border-radius: 5px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+.htp-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 20px; }
+.htp-nav-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 10px 18px; border-radius: 8px; font-family: 'Space Mono', monospace; font-size: 12px; font-weight: 700; cursor: pointer; }
+.htp-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.htp-dots { display: flex; gap: 6px; }
+.htp-dot-pip { width: 6px; height: 6px; border-radius: 50%; background: var(--border); transition: background 0.2s; }
+.htp-dot-pip.on { background: var(--amber); }
+.htp-done-btn { background: var(--amber); color: var(--bg); border: none; padding: 10px 18px; border-radius: 8px; font-family: 'Space Mono', monospace; font-size: 12px; font-weight: 700; cursor: pointer; }
+
+#loading-msg { text-align: center; color: var(--muted); font-size: 13px; padding: 40px 0; letter-spacing: 1px; }
 </style>
 </head>
 <body>
-
 <header>
   <div class="brand">S<span>p</span>ectrum</div>
   <div class="header-btns">
@@ -463,31 +144,31 @@ header {
 <div id="toast"></div>
 
 <div id="game-wrap">
-  <div class="meta-row">
+  <div id="loading-msg">Loading today's puzzle…</div>
+
+  <div class="meta-row" id="meta-row" style="display:none">
     <span id="puzzle-label" class="meta-puzzle">#—</span>
     <span id="date-label">—</span>
   </div>
-
-  <div class="phase-bar">
+  <div class="phase-bar" id="phase-bar" style="display:none">
     <div class="phase-pip active" id="pip1"></div>
     <div class="phase-pip" id="pip2"></div>
   </div>
-
-  <div class="lives-row">
+  <div class="lives-row" id="lives-row" style="display:none">
     <div class="lives-dots" id="lives-dots"></div>
     <div class="instruction" id="instruction"></div>
   </div>
 
   <div id="history-wrap"></div>
-
   <div id="board"></div>
   <div class="swap-hint" id="swap-hint"></div>
 
-  <button id="submit-btn" onclick="handleSubmit()" disabled>Select 5 items</button>
+  <button id="submit-btn" onclick="handleSubmit()" disabled style="display:none">Select 5 items</button>
 
   <div id="end-card">
     <div class="end-title" id="end-title">—</div>
     <div class="end-theme" id="end-theme"></div>
+    <div class="end-metric" id="end-metric"></div>
     <div class="stat-row" id="end-stats"></div>
     <div class="countdown-wrap">
       <div class="countdown-label">Next puzzle in</div>
@@ -495,131 +176,20 @@ header {
     </div>
     <button class="share-btn" onclick="shareResult()">Share Result ↗</button>
   </div>
-
-  <div id="already-played"></div>
 </div>
 
 <!-- HOW TO PLAY -->
-<style>
-.htp-slides { position: relative; overflow: hidden; }
-.htp-slide { display: none; animation: slideIn 0.25s ease; }
-.htp-slide.active { display: block; }
-@keyframes slideIn { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: translateX(0); } }
-.htp-slide-num {
-  font-size: 11px; color: var(--muted); text-align: center;
-  letter-spacing: 2px; text-transform: uppercase; margin-bottom: 18px;
-}
-.htp-big {
-  font-family: 'Playfair Display', serif;
-  font-size: 20px;
-  margin-bottom: 10px;
-  line-height: 1.3;
-}
-.htp-body {
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.8;
-  margin-bottom: 18px;
-}
-.htp-example {
-  background: var(--surface2);
-  border-radius: 10px;
-  padding: 14px;
-  margin-bottom: 16px;
-}
-.htp-example-label {
-  font-size: 10px;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 10px;
-}
-.htp-items-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-.htp-item {
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: 8px;
-  padding: 10px;
-  font-size: 12px;
-  font-weight: 700;
-  text-align: center;
-}
-.htp-item.sel { border-color: var(--amber); background: var(--amber-dim); color: var(--amber); }
-.htp-item.decoy { color: var(--muted); opacity: 0.5; }
-.htp-legend { display: flex; flex-direction: column; gap: 8px; }
-.htp-legend-row { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--muted); }
-.htp-box {
-  width: 26px; height: 26px; border-radius: 5px; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 700;
-}
-.htp-order-items { display: flex; flex-direction: column; gap: 6px; }
-.htp-order-item {
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: 8px;
-  padding: 10px 14px;
-  font-size: 12px;
-  font-weight: 700;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.htp-order-item.good { border-color: var(--green); background: var(--green-dim); }
-.htp-order-item.close { border-color: var(--yellow); background: var(--yellow-dim); }
-.htp-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-.htp-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 4px;
-}
-.htp-nav-btn {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  color: var(--text);
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-family: 'Space Mono', monospace;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-.htp-nav-btn:hover { background: var(--border); }
-.htp-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-.htp-dots { display: flex; gap: 6px; }
-.htp-dot-pip {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--border);
-  transition: background 0.2s;
-}
-.htp-dot-pip.on { background: var(--amber); }
-.htp-nav-close {
-  background: var(--amber);
-  color: var(--bg);
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-family: 'Space Mono', monospace;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-}
-</style>
 <div class="modal-overlay" id="how-modal">
   <div class="modal">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
       <div class="modal-title" style="margin:0;">How to Play</div>
       <button class="modal-close" onclick="closeModal('how-modal')">×</button>
     </div>
-    <div class="htp-slides">
-
-      <!-- SLIDE 1 -->
+    <div id="htp-slides">
       <div class="htp-slide active" id="htp-slide-0">
         <div class="htp-slide-num">1 of 3</div>
         <div class="htp-big">Find the 5 that belong.</div>
-        <div class="htp-body">You're given 7 items. Five share a hidden theme — two are decoys. Select exactly 5 and submit. A wrong pick costs a life.</div>
+        <div class="htp-body">You're given 7 items. Five share a hidden theme — two are decoys. Select exactly 5 and submit. A wrong pick costs a life. You have 4 lives total.</div>
         <div class="htp-example">
           <div class="htp-example-label">Example — theme: "Things with holes"</div>
           <div class="htp-items-grid">
@@ -633,51 +203,36 @@ header {
           </div>
         </div>
       </div>
-
-      <!-- SLIDE 2 -->
       <div class="htp-slide" id="htp-slide-1">
         <div class="htp-slide-num">2 of 3</div>
         <div class="htp-big">Now put them in order.</div>
-        <div class="htp-body">The 5 items can be ranked on a hidden scale — lowest to highest. You have to figure out what that scale is. Tap any two items to swap their positions, then submit.</div>
+        <div class="htp-body">The 5 items share a hidden ranking — your job is to figure out what it is and sort them lowest to highest. Tap any two items to swap, then submit.</div>
         <div class="htp-example">
-          <div class="htp-example-label">Example — you figured out: size</div>
+          <div class="htp-example-label">Example — the hidden scale was: size</div>
           <div class="htp-order-items">
-            <div class="htp-order-item good"><span>Macaroni</span> <span style="color:var(--green);font-size:11px;">smallest</span></div>
-            <div class="htp-order-item good"><span>Donut</span></div>
-            <div class="htp-order-item close"><span>Sponge</span> <span style="color:var(--yellow);font-size:10px;">off by 1</span></div>
-            <div class="htp-order-item close"><span>Cheese</span> <span style="color:var(--yellow);font-size:10px;">off by 1</span></div>
-            <div class="htp-order-item good"><span>Bowling Ball</span> <span style="color:var(--green);font-size:11px;">largest</span></div>
+            <div class="htp-order-item good"><span>Macaroni</span><span style="color:var(--green);font-size:11px;">✓ correct</span></div>
+            <div class="htp-order-item good"><span>Donut</span><span style="color:var(--green);font-size:11px;">✓ correct</span></div>
+            <div class="htp-order-item close"><span>Sponge</span><span style="color:var(--yellow);font-size:10px;">~ off by 1</span></div>
+            <div class="htp-order-item close"><span>Cheese</span><span style="color:var(--yellow);font-size:10px;">~ off by 1</span></div>
+            <div class="htp-order-item good"><span>Bowling Ball</span><span style="color:var(--green);font-size:11px;">✓ correct</span></div>
           </div>
         </div>
       </div>
-
-      <!-- SLIDE 3 -->
       <div class="htp-slide" id="htp-slide-2">
         <div class="htp-slide-num">3 of 3</div>
         <div class="htp-big">Reading the feedback.</div>
-        <div class="htp-body">After each Phase 2 guess you'll see colored tiles — one per item — showing how close each position was.</div>
+        <div class="htp-body">After each Phase 2 guess, you get one colored tile per item showing how close that position was.</div>
         <div class="htp-example">
           <div class="htp-legend">
-            <div class="htp-legend-row">
-              <div class="htp-box" style="background:var(--green);">✓</div>
-              <span><b style="color:var(--text);">Correct</b> — this item is in exactly the right spot</span>
-            </div>
-            <div class="htp-legend-row">
-              <div class="htp-box" style="background:var(--yellow);">~</div>
-              <span><b style="color:var(--text);">Close</b> — off by exactly one position</span>
-            </div>
-            <div class="htp-legend-row">
-              <div class="htp-box" style="background:var(--surface2);border:1px solid var(--border);">✗</div>
-              <span><b style="color:var(--text);">Wrong</b> — more than one spot off</span>
-            </div>
+            <div class="htp-legend-row"><div class="htp-box" style="background:var(--green);">✓</div><span><b style="color:var(--text);">Correct</b> — exactly the right spot</span></div>
+            <div class="htp-legend-row"><div class="htp-box" style="background:var(--yellow);">~</div><span><b style="color:var(--text);">Close</b> — off by exactly one position</span></div>
+            <div class="htp-legend-row"><div class="htp-box" style="background:var(--surface2);border:1px solid var(--border);">✗</div><span><b style="color:var(--text);">Wrong</b> — more than one spot off</span></div>
           </div>
         </div>
-        <div class="htp-body" style="margin-bottom:0;">A new puzzle drops every day. Your progress and stats are saved automatically.</div>
+        <div class="htp-body" style="margin-bottom:0;">A new puzzle every day. Progress and stats are saved automatically.</div>
       </div>
-
     </div>
-
-    <div class="htp-nav" style="margin-top:20px;">
+    <div class="htp-nav">
       <button class="htp-nav-btn" id="htp-prev" onclick="htpNav(-1)" disabled>← Back</button>
       <div class="htp-dots">
         <div class="htp-dot-pip on" id="htp-pip-0"></div>
@@ -685,7 +240,7 @@ header {
         <div class="htp-dot-pip" id="htp-pip-2"></div>
       </div>
       <button class="htp-nav-btn" id="htp-next" onclick="htpNav(1)">Next →</button>
-      <button class="htp-nav-close" id="htp-done" onclick="closeModal('how-modal')" style="display:none;">Got it</button>
+      <button class="htp-done-btn" id="htp-done" onclick="closeModal('how-modal')" style="display:none;">Got it</button>
     </div>
   </div>
 </div>
@@ -702,171 +257,105 @@ header {
 <div class="modal-overlay" id="archive-modal">
   <div class="modal">
     <div class="modal-title">Archive <button class="modal-close" onclick="closeModal('archive-modal')">×</button></div>
-    <div id="archive-list"></div>
+    <div id="archive-list"><div style="color:var(--muted);font-size:13px;padding:20px 0;text-align:center;">Loading…</div></div>
   </div>
 </div>
 
 <script>
-
+// ── CONFIG ────────────────────────────────────────────────────────────────────
 const SUPABASE_URL = 'https://kfjnvbbvbcsarjgbkzhc.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtmam52YmJ2YmNzYXJqZ2JremhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1NzgzMzUsImV4cCI6MjA5MzE1NDMzNX0.fVbZMRWFw1VafTo6BjS84QuCDuJ2B4vsWWhZt0zE3iY';
 
-async function fetchTodaysPuzzle() {
-  const today = new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
-  // en-CA gives YYYY-MM-DD format which Supabase date column expects
-  
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let allPuzzles = []; // loaded once from Supabase at boot
+let puzzle, phase, lives, maxLives;
+let allEntities, selectedP1, orderP2, selP2Index;
+let history, gameOver, isDaily, isWon;
+
+// ── DATE UTILS ────────────────────────────────────────────────────────────────
+function getTodayET() {
+  return new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
+}
+function formatDateStr(s) {
+  const [y,m,d] = s.split('-').map(Number);
+  return new Date(y, m-1, d).toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
+}
+
+// ── SUPABASE FETCH ────────────────────────────────────────────────────────────
+async function fetchAllPublishedPuzzles() {
+  const today = getTodayET();
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/puzzles?publish_date=eq.${today}&select=puzzle_number,publish_date,theme,items,decoys`,
-    {
-      headers: {
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-      }
-    }
+    `${SUPABASE_URL}/rest/v1/puzzles?publish_date=lte.${today}&select=puzzle_number,publish_date,theme,items,decoys&order=puzzle_number.asc`,
+    { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } }
   );
-  const data = await res.json();
-  return data[0] || null; // returns today's puzzle or null if none exists
+  if (!res.ok) { console.error('Supabase', res.status, await res.text()); return []; }
+  const rows = await res.json();
+  return rows.map(r => ({ id: r.puzzle_number, date: r.publish_date, theme: r.theme, items: r.items, decoys: r.decoys }));
 }
 
-
-// ── DAILY ROTATION ────────────────────────────────────────────────────────────
-function getTodayKey() {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-}
-// Puzzle #1 launched on this date. Each subsequent day unlocks the next puzzle in order.
-const LAUNCH_DATE = new Date('2025-01-01');
-
-function getDailyPuzzleIndex() {
-  const today = new Date(); today.setHours(0,0,0,0);
-  const launch = new Date(LAUNCH_DATE); launch.setHours(0,0,0,0);
-  return Math.floor((today.getTime() - launch.getTime()) / 86400000);
+function getTodaysPuzzle() {
+  const today = getTodayET();
+  return allPuzzles.find(p => p.date === today) || allPuzzles[allPuzzles.length - 1] || null;
 }
 
-function getDailyPuzzle() {
-  const idx = getDailyPuzzleIndex();
-  if (idx < 0) return null; // Before launch
-  if (idx >= PUZZLES.length) return PUZZLES[PUZZLES.length - 1]; // No new puzzle today yet — show latest
-  return PUZZLES[idx];
-}
-function formatDate(d) {
-  return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
-}
-
-// ── STATS ─────────────────────────────────────────────────────────────────────
+// ── LOCAL STORAGE ─────────────────────────────────────────────────────────────
 function loadStats() {
   try { return JSON.parse(localStorage.getItem('spectrum_stats')) || {played:0,won:0,streak:0,maxStreak:0,dist:[0,0,0,0,0]}; }
   catch(e) { return {played:0,won:0,streak:0,maxStreak:0,dist:[0,0,0,0,0]}; }
 }
 function saveStats(s) { localStorage.setItem('spectrum_stats', JSON.stringify(s)); }
-
 function recordResult(won, livesLeft) {
-  const st = loadStats();
-  st.played++;
-  if (won) {
-    st.won++;
-    st.streak++;
-    st.maxStreak = Math.max(st.maxStreak, st.streak);
-    const idx = Math.max(0, Math.min(4, 4 - livesLeft));
-    st.dist[idx]++;
-  } else {
-    st.streak = 0;
-  }
+  const st = loadStats(); st.played++;
+  if (won) { st.won++; st.streak++; st.maxStreak = Math.max(st.maxStreak, st.streak); st.dist[Math.max(0,Math.min(4,4-livesLeft))]++; }
+  else { st.streak = 0; }
   saveStats(st);
 }
-
-// ── SAVED GAME STATE ──────────────────────────────────────────────────────────
-function saveGameState(state) {
-  localStorage.setItem('spectrum_game_' + getTodayKey(), JSON.stringify(state));
-}
+function saveGameState(state) { localStorage.setItem('spectrum_game_' + getTodayET(), JSON.stringify(state)); }
 function loadGameState() {
-  try { return JSON.parse(localStorage.getItem('spectrum_game_' + getTodayKey())); }
+  try { return JSON.parse(localStorage.getItem('spectrum_game_' + getTodayET())); }
   catch(e) { return null; }
 }
-
-// ── ARCHIVE COMPLETION ────────────────────────────────────────────────────────
 function getArchiveCompletions() {
   try { return JSON.parse(localStorage.getItem('spectrum_archive')) || {}; }
   catch(e) { return {}; }
 }
-function saveArchiveCompletion(puzzleId, won) {
-  const a = getArchiveCompletions();
-  a[puzzleId] = won ? 'won' : 'lost';
+function saveArchiveCompletion(id, won) {
+  const a = getArchiveCompletions(); a[id] = won ? 'won' : 'lost';
   localStorage.setItem('spectrum_archive', JSON.stringify(a));
 }
 
-// ── GAME STATE ────────────────────────────────────────────────────────────────
-let puzzle, phase, lives, maxLives;
-let allEntities, selectedP1, orderP2, selP2Index;
-let history, gameOver, isDaily, isWon;
-
-function initGame(p, daily) {
-  puzzle = p;
-  isDaily = daily;
-  phase = 1;
-  maxLives = 4;
-  lives = maxLives;
-  allEntities = shuffle([...p.items, ...p.decoys].map(x => ({...x})));
-  selectedP1 = [];
-  orderP2 = [];
-  selP2Index = null;
-  history = [];
-  gameOver = false;
-  isWon = false;
-
-  document.getElementById('puzzle-label').textContent = '#' + p.id;
-  document.getElementById('date-label').textContent = daily ? formatDate(new Date()) : 'Archive';
-  document.getElementById('end-card').classList.remove('show');
-  document.getElementById('already-played').classList.remove('show');
+// ── UI VISIBILITY ─────────────────────────────────────────────────────────────
+function showGameUI() {
+  document.getElementById('loading-msg').style.display = 'none';
+  ['meta-row','phase-bar','lives-row'].forEach(id => document.getElementById(id).style.display = '');
   document.getElementById('submit-btn').style.display = 'block';
+}
 
-  updatePips();
-  renderLives();
-  renderInstruction();
-  renderHistory();
-  renderBoard();
-  updateSubmitBtn();
+// ── GAME INIT ─────────────────────────────────────────────────────────────────
+function initGame(p, daily) {
+  puzzle = p; isDaily = daily; phase = 1; maxLives = 4; lives = maxLives;
+  allEntities = shuffle([...p.items, ...p.decoys].map(x => ({...x})));
+  selectedP1 = []; orderP2 = []; selP2Index = null;
+  history = []; gameOver = false; isWon = false;
+  showGameUI();
+  document.getElementById('puzzle-label').textContent = '#' + p.id;
+  document.getElementById('date-label').textContent = daily ? formatDateStr(p.date) : 'Archive';
+  document.getElementById('end-card').classList.remove('show');
+  updatePips(); renderLives(); renderInstruction(); renderHistory(); renderBoard(); updateSubmitBtn();
   closeAllModals();
 }
 
 function restoreGame(state) {
-  // Restore from saved state (for daily puzzle resumption)
-  puzzle = state.puzzle;
-  isDaily = true;
-  phase = state.phase;
-  maxLives = 4;
-  lives = state.lives;
-  allEntities = state.allEntities;
-  selectedP1 = state.selectedP1;
-  orderP2 = state.orderP2;
-  selP2Index = null;
-  history = state.history;
-  gameOver = state.gameOver;
-  isWon = state.isWon;
-
+  puzzle = state.puzzle; isDaily = true; phase = state.phase; maxLives = 4; lives = state.lives;
+  allEntities = state.allEntities; selectedP1 = state.selectedP1; orderP2 = state.orderP2;
+  selP2Index = null; history = state.history; gameOver = state.gameOver; isWon = state.isWon;
+  showGameUI();
   document.getElementById('puzzle-label').textContent = '#' + puzzle.id;
-  document.getElementById('date-label').textContent = formatDate(new Date());
-
-  updatePips();
-  renderLives();
-  renderInstruction();
-  renderHistory();
-
-  if (gameOver) {
-    document.getElementById('submit-btn').style.display = 'none';
-    showEndCard();
-    if (phase === 1) {
-      // hadn't transitioned yet — still show board
-      renderBoard();
-    } else {
-      renderBoard();
-    }
-  } else {
-    document.getElementById('end-card').classList.remove('show');
-    document.getElementById('submit-btn').style.display = 'block';
-    renderBoard();
-    updateSubmitBtn();
-  }
+  document.getElementById('date-label').textContent = formatDateStr(puzzle.date || getTodayET());
+  updatePips(); renderLives(); renderInstruction(); renderHistory();
+  if (gameOver) { document.getElementById('submit-btn').style.display = 'none'; showEndCard(); }
+  else { document.getElementById('end-card').classList.remove('show'); updateSubmitBtn(); }
+  renderBoard();
 }
 
 function persistState() {
@@ -876,74 +365,45 @@ function persistState() {
 
 // ── SHUFFLE ───────────────────────────────────────────────────────────────────
 function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i+1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
+  for (let i = arr.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
   return arr;
 }
 
 // ── RENDER ────────────────────────────────────────────────────────────────────
 function updatePips() {
-  document.getElementById('pip1').className = 'phase-pip ' + (phase === 1 ? 'active' : 'done');
-  document.getElementById('pip2').className = 'phase-pip ' + (phase === 2 ? 'active' : (gameOver && phase === 2 ? 'done' : ''));
+  document.getElementById('pip1').className = 'phase-pip ' + (phase===1 ? 'active' : 'done');
+  document.getElementById('pip2').className = 'phase-pip ' + (phase===2 ? 'active' : '');
 }
-
 function renderLives() {
-  const el = document.getElementById('lives-dots');
-  el.innerHTML = '';
-  for (let i = 0; i < maxLives; i++) {
-    const dot = document.createElement('div');
-    dot.className = 'life-dot' + (i >= lives ? ' lost' : '');
-    el.appendChild(dot);
-  }
+  const el = document.getElementById('lives-dots'); el.innerHTML = '';
+  for (let i=0;i<maxLives;i++) { const d=document.createElement('div'); d.className='life-dot'+(i>=lives?' lost':''); el.appendChild(d); }
 }
-
 function renderInstruction() {
   const el = document.getElementById('instruction');
-  if (gameOver) {
-    el.innerHTML = '';
-  } else if (phase === 1) {
-    el.innerHTML = '<b>Phase 1:</b> Select the 5 items that share a theme. Two are decoys.';
-  } else {
-    el.innerHTML = '<b>Phase 2:</b> Tap two items to swap their positions. Figure out the right order yourself — lowest to highest.';
-  }
-  document.getElementById('swap-hint').textContent = (!gameOver && phase === 2) ? '🟨 = off by exactly 1 spot' : '';
+  if (gameOver) el.innerHTML = '';
+  else if (phase===1) el.innerHTML = '<b>Phase 1:</b> Select the 5 items that share a theme. Two are decoys.';
+  else el.innerHTML = '<b>Phase 2:</b> Figure out the hidden order. Tap two items to swap. Lowest → highest.';
+  document.getElementById('swap-hint').textContent = (!gameOver && phase===2) ? '🟨 = off by exactly 1 spot' : '';
 }
-
 function renderHistory() {
-  const wrap = document.getElementById('history-wrap');
-  wrap.innerHTML = '';
+  const wrap = document.getElementById('history-wrap'); wrap.innerHTML = '';
   history.forEach(log => {
-    const row = document.createElement('div');
-    row.className = 'history-row';
-    if (log.phase === 1) {
-      for (let i = 0; i < 5; i++) {
-        const b = document.createElement('div');
-        b.className = 'hbox ' + (log.type === 'pass' ? 'p1-pass' : 'p1-fail');
-        b.textContent = log.type === 'pass' ? '✓' : '✗';
-        row.appendChild(b);
-      }
+    const row = document.createElement('div'); row.className = 'history-row';
+    if (log.phase===1) {
+      for (let i=0;i<5;i++) { const b=document.createElement('div'); b.className='hbox '+(log.type==='pass'?'p1-pass':'p1-fail'); b.textContent=log.type==='pass'?'✓':'✗'; row.appendChild(b); }
     } else {
-      log.data.forEach(r => {
-        const b = document.createElement('div');
-        b.className = 'hbox ' + (r === 'G' ? 'correct' : r === 'Y' ? 'close' : 'wrong');
-        row.appendChild(b);
-      });
+      log.data.forEach(r => { const b=document.createElement('div'); b.className='hbox '+(r==='G'?'correct':r==='Y'?'close':'wrong'); row.appendChild(b); });
     }
     wrap.appendChild(row);
   });
 }
-
 function renderBoard() {
-  const board = document.getElementById('board');
-  board.innerHTML = '';
-
-  if (phase === 1) {
+  const board = document.getElementById('board'); board.innerHTML = '';
+  if (phase===1) {
     board.className = '';
-    allEntities.forEach((item, idx) => {
+    allEntities.forEach(item => {
       const div = document.createElement('div');
-      div.className = 'item' + (selectedP1.includes(item.id) ? ' sel1' : '');
+      div.className = 'item'+(selectedP1.includes(item.id)?' sel1':'');
       div.textContent = item.name;
       if (!gameOver) div.onclick = () => clickP1(item.id);
       board.appendChild(div);
@@ -951,284 +411,147 @@ function renderBoard() {
   } else {
     board.className = 'phase2';
     orderP2.forEach((id, idx) => {
-      const itemData = puzzle.items.find(i => i.id === id);
+      const itemData = puzzle.items.find(i => i.id===id);
       const div = document.createElement('div');
-      div.className = 'item' + (gameOver ? ' revealed' : selP2Index === idx ? ' sel2' : '');
+      div.className = 'item'+(gameOver?' revealed':selP2Index===idx?' sel2':'');
       if (!gameOver) div.onclick = () => clickP2(idx);
-
-      const name = document.createElement('span');
-      name.textContent = itemData.name;
-      const val = document.createElement('span');
-      val.className = 'item-val';
-      val.textContent = itemData.display;
-
-      div.appendChild(name);
-      div.appendChild(val);
-      board.appendChild(div);
+      const name = document.createElement('span'); name.textContent = itemData.name;
+      const val = document.createElement('span'); val.className='item-val'; val.textContent=itemData.display;
+      div.appendChild(name); div.appendChild(val); board.appendChild(div);
     });
   }
 }
-
 function updateSubmitBtn() {
   const btn = document.getElementById('submit-btn');
-  if (phase === 1) {
-    btn.disabled = selectedP1.length !== 5;
-    btn.textContent = selectedP1.length === 5 ? 'Submit Group' : `Select ${5 - selectedP1.length} more`;
-  } else {
-    btn.disabled = false;
-    btn.textContent = 'Submit Order';
-  }
+  if (phase===1) { btn.disabled=selectedP1.length!==5; btn.textContent=selectedP1.length===5?'Submit Group':`Select ${5-selectedP1.length} more`; }
+  else { btn.disabled=false; btn.textContent='Submit Order'; }
 }
 
 // ── INTERACTIONS ──────────────────────────────────────────────────────────────
 function clickP1(id) {
-  if (gameOver || phase !== 1) return;
-  if (selectedP1.includes(id)) {
-    selectedP1 = selectedP1.filter(x => x !== id);
-  } else if (selectedP1.length < 5) {
-    selectedP1.push(id);
-  }
-  renderBoard();
-  updateSubmitBtn();
+  if (gameOver||phase!==1) return;
+  selectedP1 = selectedP1.includes(id) ? selectedP1.filter(x=>x!==id) : selectedP1.length<5 ? [...selectedP1,id] : selectedP1;
+  renderBoard(); updateSubmitBtn();
 }
-
 function clickP2(idx) {
-  if (gameOver || phase !== 2) return;
-  if (selP2Index === null) {
-    selP2Index = idx;
-  } else if (selP2Index === idx) {
-    selP2Index = null;
-  } else {
-    [orderP2[selP2Index], orderP2[idx]] = [orderP2[idx], orderP2[selP2Index]];
-    selP2Index = null;
-  }
+  if (gameOver||phase!==2) return;
+  if (selP2Index===null) selP2Index=idx;
+  else if (selP2Index===idx) selP2Index=null;
+  else { [orderP2[selP2Index],orderP2[idx]]=[orderP2[idx],orderP2[selP2Index]]; selP2Index=null; }
   renderBoard();
 }
-
-function handleSubmit() {
-  if (gameOver) return;
-  if (phase === 1) submitPhase1();
-  else submitPhase2();
-}
+function handleSubmit() { if (!gameOver) { if (phase===1) submitPhase1(); else submitPhase2(); } }
 
 function submitPhase1() {
-  if (selectedP1.length !== 5) return;
-  const correct = selectedP1.filter(id => !allEntities.find(e => e.id === id).isDecoy).length;
-
-  if (correct < 5) {
-    lives--;
-    history.push({phase:1, type:'fail'});
-    renderHistory();
-    renderLives();
-    persistState();
-
-    document.querySelectorAll('.item.sel1').forEach(el => {
-      el.classList.add('shake');
-      setTimeout(() => el.classList.remove('shake'), 500);
-    });
-
-    if (lives === 0) { handleLoss(); return; }
-    if (correct === 4) showToast("One away!");
-    else showToast("Not quite — try again.");
+  if (selectedP1.length!==5) return;
+  const correct = selectedP1.filter(id=>!allEntities.find(e=>e.id===id).isDecoy).length;
+  if (correct<5) {
+    lives--; history.push({phase:1,type:'fail'}); renderHistory(); renderLives(); persistState();
+    document.querySelectorAll('.item.sel1').forEach(el=>{el.classList.add('shake');setTimeout(()=>el.classList.remove('shake'),500);});
+    if (lives===0) { handleLoss(); return; }
+    showToast(correct===4 ? "One away!" : "Not quite — try again.");
   } else {
-    history.push({phase:1, type:'pass'});
-    renderHistory();
-    showToast("Got it! Now order them.");
-    transitionToPhase2();
-    persistState();
+    history.push({phase:1,type:'pass'}); renderHistory();
+    showToast("Got it! Now figure out the order.");
+    transitionToPhase2(); persistState();
   }
 }
-
 function transitionToPhase2() {
-  phase = 2;
-  orderP2 = [...selectedP1];
-  selP2Index = null;
-  updatePips();
-  renderInstruction();
-  renderBoard();
-  updateSubmitBtn();
+  phase=2; orderP2=[...selectedP1]; selP2Index=null;
+  updatePips(); renderInstruction(); renderBoard(); updateSubmitBtn();
 }
-
 function submitPhase2() {
-  const correctIds = [...puzzle.items].sort((a,b) => a.value - b.value).map(i => i.id);
-  let result = [];
-  let correctCount = 0;
-
-  for (let i = 0; i < orderP2.length; i++) {
-    const ci = correctIds.indexOf(orderP2[i]);
-    const diff = Math.abs(ci - i);
-    if (diff === 0) { result.push('G'); correctCount++; }
-    else if (diff === 1) { result.push('Y'); }
-    else { result.push('X'); }
+  const correctIds=[...puzzle.items].sort((a,b)=>a.value-b.value).map(i=>i.id);
+  let result=[]; let correctCount=0;
+  for (let i=0;i<orderP2.length;i++) {
+    const diff=Math.abs(correctIds.indexOf(orderP2[i])-i);
+    if (diff===0){result.push('G');correctCount++;} else if(diff===1) result.push('Y'); else result.push('X');
   }
-
-  history.push({phase:2, type:'guess', data:result});
-  renderHistory();
-
-  if (correctCount === 5) {
-    handleWin();
-  } else {
-    lives--;
-    renderLives();
-    persistState();
-
-    document.querySelectorAll('#board .item').forEach(el => {
-      el.classList.add('shake');
-      setTimeout(() => el.classList.remove('shake'), 500);
-    });
-
-    if (lives === 0) { handleLoss(); }
-    else showToast(correctCount + " in the right spot.");
-  }
+  history.push({phase:2,type:'guess',data:result}); renderHistory();
+  if (correctCount===5) { handleWin(); return; }
+  lives--; renderLives(); persistState();
+  document.querySelectorAll('#board .item').forEach(el=>{el.classList.add('shake');setTimeout(()=>el.classList.remove('shake'),500);});
+  if (lives===0) handleLoss(); else showToast(correctCount+' in the right spot.');
 }
-
 function handleWin() {
-  isWon = true;
-  gameOver = true;
-  if (isDaily) recordResult(true, lives);
-  if (isDaily) saveArchiveCompletion(puzzle.id, true);
-  persistState();
-  document.getElementById('submit-btn').style.display = 'none';
-  renderInstruction();
-  showEndCard();
-  renderBoard();
+  isWon=true; gameOver=true;
+  if (isDaily) { recordResult(true,lives); saveArchiveCompletion(puzzle.id,true); }
+  persistState(); document.getElementById('submit-btn').style.display='none';
+  renderInstruction(); showEndCard(); renderBoard();
 }
-
 function handleLoss() {
-  isWon = false;
-  gameOver = true;
-  if (isDaily) recordResult(false, 0);
-  if (isDaily) saveArchiveCompletion(puzzle.id, false);
-
-  // Transition to phase2 if we never got there
-  if (phase === 1) {
-    phase = 2;
-    orderP2 = [...puzzle.items].sort((a,b) => a.value - b.value).map(i => i.id);
-  }
-  persistState();
-  updatePips();
-  renderInstruction();
-  document.getElementById('submit-btn').style.display = 'none';
-  showEndCard();
-  renderBoard();
+  isWon=false; gameOver=true;
+  if (isDaily) { recordResult(false,0); saveArchiveCompletion(puzzle.id,false); }
+  if (phase===1) { phase=2; orderP2=[...puzzle.items].sort((a,b)=>a.value-b.value).map(i=>i.id); }
+  persistState(); updatePips(); renderInstruction();
+  document.getElementById('submit-btn').style.display='none'; showEndCard(); renderBoard();
 }
 
 // ── END CARD ──────────────────────────────────────────────────────────────────
 function showEndCard() {
-  const card = document.getElementById('end-card');
-  card.classList.add('show');
-
-  document.getElementById('end-title').textContent = isWon
-    ? (lives === maxLives ? 'Flawless.' : lives >= 2 ? 'Well done.' : 'Close call.')
-    : 'Better luck tomorrow.';
-
-  document.getElementById('end-theme').innerHTML =
-    `Theme: <span>${puzzle.theme}</span>`;
-
-  const st = loadStats();
-  const pct = st.played ? Math.round((st.won / st.played) * 100) : 0;
+  document.getElementById('end-card').classList.add('show');
+  document.getElementById('end-title').textContent = isWon ? (lives===maxLives?'Flawless.':lives>=2?'Well done.':'Close call.') : 'Better luck tomorrow.';
+  document.getElementById('end-theme').innerHTML = `Theme: <span>${puzzle.theme}</span>`;
+  document.getElementById('end-metric').textContent = puzzle.metric ? `The scale: ${puzzle.metric}` : '';
+  const st=loadStats(); const pct=st.played?Math.round((st.won/st.played)*100):0;
   document.getElementById('end-stats').innerHTML = `
     <div class="stat-box"><div class="stat-num">${st.played}</div><div class="stat-label">Played</div></div>
     <div class="stat-box"><div class="stat-num">${pct}%</div><div class="stat-label">Win Rate</div></div>
     <div class="stat-box"><div class="stat-num">${st.streak}</div><div class="stat-label">Streak</div></div>
-    <div class="stat-box"><div class="stat-num">${st.maxStreak}</div><div class="stat-label">Best</div></div>
-  `;
-
+    <div class="stat-box"><div class="stat-num">${st.maxStreak}</div><div class="stat-label">Best</div></div>`;
   startCountdown();
 }
-
-// ── COUNTDOWN ─────────────────────────────────────────────────────────────────
 let countdownInterval;
 function startCountdown() {
-  function update() {
-    const now = new Date();
-    const tomorrow = new Date(now);
-    tomorrow.setHours(24,0,0,0);
-    const diff = tomorrow - now;
-    const h = Math.floor(diff / 3600000);
-    const m = Math.floor((diff % 3600000) / 60000);
-    const s = Math.floor((diff % 60000) / 1000);
-    document.getElementById('countdown').textContent =
-      String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  function upd() {
+    const now=new Date(), tom=new Date(now); tom.setHours(24,0,0,0);
+    const diff=tom-now, h=Math.floor(diff/3600000), m=Math.floor((diff%3600000)/60000), s=Math.floor((diff%60000)/1000);
+    document.getElementById('countdown').textContent=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
   }
-  update();
-  clearInterval(countdownInterval);
-  countdownInterval = setInterval(update, 1000);
+  upd(); clearInterval(countdownInterval); countdownInterval=setInterval(upd,1000);
 }
 
 // ── SHARE ─────────────────────────────────────────────────────────────────────
 function shareResult() {
-  let txt = `Spectrum #${puzzle.id}\n`;
-  txt += isWon ? `${lives}/${maxLives} lives remaining\n\n` : `0/${maxLives} lives\n\n`;
-
+  let txt=`Spectrum #${puzzle.id}\n`+(isWon?`${lives}/${maxLives} lives remaining\n\n`:`Did not finish\n\n`);
   history.forEach(log => {
-    if (log.phase === 1) {
-      txt += log.type === 'pass' ? '🟩🟩🟩🟩🟩\n' : '⬜⬜⬜⬜⬜\n';
-    } else {
-      txt += log.data.map(r => r==='G'?'🟩':r==='Y'?'🟨':'⬛').join('') + '\n';
-    }
+    if (log.phase===1) txt+=log.type==='pass'?'🟩🟩🟩🟩🟩\n':'⬜⬜⬜⬜⬜\n';
+    else txt+=log.data.map(r=>r==='G'?'🟩':r==='Y'?'🟨':'⬛').join('')+'\n';
   });
-
-  navigator.clipboard.writeText(txt).then(() => showToast('Copied!')).catch(() => {
-    prompt('Copy your result:', txt);
-  });
+  navigator.clipboard.writeText(txt).then(()=>showToast('Copied!')).catch(()=>prompt('Copy:',txt));
 }
 
-// ── STATS MODAL ───────────────────────────────────────────────────────────────
+// ── STATS ─────────────────────────────────────────────────────────────────────
 function renderStats() {
-  const st = loadStats();
-  const pct = st.played ? Math.round((st.won / st.played) * 100) : 0;
-  const maxDist = Math.max(...st.dist, 1);
-
-  let html = `
-    <div class="stat-row" style="margin-bottom:20px;">
-      <div class="stat-box"><div class="stat-num">${st.played}</div><div class="stat-label">Played</div></div>
-      <div class="stat-box"><div class="stat-num">${pct}%</div><div class="stat-label">Win %</div></div>
-      <div class="stat-box"><div class="stat-num">${st.streak}</div><div class="stat-label">Streak</div></div>
-      <div class="stat-box"><div class="stat-num">${st.maxStreak}</div><div class="stat-label">Best</div></div>
-    </div>
-    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Lives Remaining Distribution</div>
-  `;
-
-  const labels = ['4 ♥', '3 ♥', '2 ♥', '1 ♥', 'Lost'];
-  st.dist.forEach((count, i) => {
-    const w = Math.max(12, Math.round((count / maxDist) * 100));
-    html += `<div class="dist-row">
-      <div class="dist-label">${labels[i]}</div>
-      <div class="dist-bar" style="width:${w}%">${count || ''}</div>
-    </div>`;
-  });
-
-  document.getElementById('stats-content').innerHTML = html;
+  const st=loadStats(); const pct=st.played?Math.round((st.won/st.played)*100):0; const maxD=Math.max(...st.dist,1);
+  const labels=['4 ♥','3 ♥','2 ♥','1 ♥','Lost'];
+  let html=`<div class="stat-row" style="margin-bottom:20px;">
+    <div class="stat-box"><div class="stat-num">${st.played}</div><div class="stat-label">Played</div></div>
+    <div class="stat-box"><div class="stat-num">${pct}%</div><div class="stat-label">Win %</div></div>
+    <div class="stat-box"><div class="stat-num">${st.streak}</div><div class="stat-label">Streak</div></div>
+    <div class="stat-box"><div class="stat-num">${st.maxStreak}</div><div class="stat-label">Best</div></div>
+  </div><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Lives Distribution</div>`;
+  st.dist.forEach((c,i)=>{const w=Math.max(12,Math.round((c/maxD)*100));html+=`<div class="dist-row"><div class="dist-label">${labels[i]}</div><div class="dist-bar" style="width:${w}%">${c||''}</div></div>`;});
+  document.getElementById('stats-content').innerHTML=html;
 }
 
 // ── ARCHIVE ───────────────────────────────────────────────────────────────────
 function renderArchive() {
-  const completions = getArchiveCompletions();
-  const daily = getDailyPuzzle();
-  const list = document.getElementById('archive-list');
-  list.innerHTML = '';
-
-  [...PUZZLES].sort((a,b) => b.id - a.id).forEach(p => {
-    const isToday = p.id === daily.id;
-    const status = completions[p.id];
-    const div = document.createElement('div');
-    div.className = 'archive-item';
-    div.innerHTML = `
+  const completions=getArchiveCompletions(), todayP=getTodaysPuzzle(), list=document.getElementById('archive-list');
+  if (allPuzzles.length===0) { list.innerHTML='<div style="color:var(--muted);font-size:13px;padding:20px 0;text-align:center;">No puzzles yet.</div>'; return; }
+  list.innerHTML='';
+  [...allPuzzles].reverse().forEach(p => {
+    const isToday=todayP&&p.id===todayP.id, status=completions[p.id];
+    const div=document.createElement('div'); div.className='archive-item';
+    div.innerHTML=`
       <div>
-        <div class="archive-num">#${p.id}${isToday ? ' <span style="color:var(--amber);font-size:10px;">TODAY</span>' : ''}</div>
+        <div class="archive-num">#${p.id}${isToday?' <span style="color:var(--amber);font-size:10px;letter-spacing:1px;">TODAY</span>':''}</div>
         <div class="archive-theme">${p.theme}</div>
       </div>
-      <div class="archive-status">${status === 'won' ? '🟩' : status === 'lost' ? '🟥' : isToday ? '▶' : '○'}</div>
-    `;
-    div.onclick = () => {
-      if (isToday) {
-        const saved = loadGameState();
-        if (saved) restoreGame(saved);
-        else initGame(p, true);
-      } else {
-        initGame(p, false);
-      }
+      <div class="archive-status">${status==='won'?'🟩':status==='lost'?'🟥':isToday?'▶':'○'}</div>`;
+    div.onclick=()=>{
+      if (isToday) { const saved=loadGameState(); if (saved) restoreGame(saved); else initGame(p,true); }
+      else initGame(p,false);
       closeAllModals();
     };
     list.appendChild(div);
@@ -1238,68 +561,45 @@ function renderArchive() {
 // ── TOAST ─────────────────────────────────────────────────────────────────────
 let toastTimer;
 function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.opacity = 1;
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { t.style.opacity = 0; }, 2200);
+  const t=document.getElementById('toast'); t.textContent=msg; t.style.opacity=1;
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>{t.style.opacity=0;},2200);
 }
 
-// ── HOW TO PLAY NAV ───────────────────────────────────────────────────────────
-let htpPage = 0;
-const HTP_TOTAL = 3;
+// ── HOW TO PLAY ───────────────────────────────────────────────────────────────
+let htpPage=0;
 function htpNav(dir) {
-  htpPage = Math.max(0, Math.min(HTP_TOTAL - 1, htpPage + dir));
-  document.querySelectorAll('.htp-slide').forEach((s, i) => {
-    s.classList.toggle('active', i === htpPage);
-  });
-  document.querySelectorAll('.htp-dot-pip').forEach((p, i) => {
-    p.classList.toggle('on', i === htpPage);
-  });
-  document.getElementById('htp-prev').disabled = htpPage === 0;
-  const isLast = htpPage === HTP_TOTAL - 1;
-  document.getElementById('htp-next').style.display = isLast ? 'none' : '';
-  document.getElementById('htp-done').style.display = isLast ? '' : 'none';
+  htpPage=Math.max(0,Math.min(2,htpPage+dir));
+  document.querySelectorAll('.htp-slide').forEach((s,i)=>s.classList.toggle('active',i===htpPage));
+  document.querySelectorAll('.htp-dot-pip').forEach((p,i)=>p.classList.toggle('on',i===htpPage));
+  document.getElementById('htp-prev').disabled=htpPage===0;
+  document.getElementById('htp-next').style.display=htpPage===2?'none':'';
+  document.getElementById('htp-done').style.display=htpPage===2?'':'none';
 }
+
+// ── MODALS ────────────────────────────────────────────────────────────────────
 function openModal(id) {
   closeAllModals();
-  if (id === 'stats-modal') renderStats();
-  if (id === 'archive-modal') renderArchive();
-  if (id === 'how-modal') { htpPage = 0; htpNav(0); }
+  if (id==='stats-modal') renderStats();
+  if (id==='archive-modal') renderArchive();
+  if (id==='how-modal') { htpPage=0; htpNav(0); }
   document.getElementById(id).classList.add('open');
 }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-function closeAllModals() {
-  document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open'));
-}
-document.querySelectorAll('.modal-overlay').forEach(m => {
-  m.addEventListener('click', e => { if (e.target === m) closeAllModals(); });
-});
+function closeAllModals() { document.querySelectorAll('.modal-overlay').forEach(m=>m.classList.remove('open')); }
+document.querySelectorAll('.modal-overlay').forEach(m=>{ m.addEventListener('click',e=>{if(e.target===m)closeAllModals();}); });
 
 // ── BOOT ──────────────────────────────────────────────────────────────────────
 (async function boot() {
-  const puzzle = await fetchTodaysPuzzle();
-  
-  if (!puzzle) {
-    document.getElementById('instruction').innerHTML = 
-      '<b>No puzzle today yet.</b> Check back soon.';
+  allPuzzles = await fetchAllPublishedPuzzles();
+  if (allPuzzles.length===0) {
+    document.getElementById('loading-msg').textContent='No puzzle available yet — check back soon!';
     return;
   }
-
-  // Map Supabase shape to what initGame expects
-  const p = {
-    id: puzzle.puzzle_number,
-    theme: puzzle.theme,
-    items: puzzle.items,
-    decoys: puzzle.decoys
-  };
-
-  const saved = loadGameState();
-  if (saved && saved.puzzle && saved.puzzle.id === p.id) {
-    restoreGame(saved);
-  } else {
-    initGame(p, true);
-  }
+  const todayP=getTodaysPuzzle();
+  if (!todayP) { document.getElementById('loading-msg').textContent='No puzzle today — check back soon!'; return; }
+  const saved=loadGameState();
+  if (saved&&saved.puzzle&&saved.puzzle.id===todayP.id) restoreGame(saved);
+  else initGame(todayP,true);
 })();
 </script>
 </body>
