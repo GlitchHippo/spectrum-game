@@ -381,11 +381,10 @@ const SUPABASE_URL = 'https://kfjnvbbvbcsarjgbkzhc.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtmam52YmJ2YmNzYXJqZ2JremhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1NzgzMzUsImV4cCI6MjA5MzE1NDMzNX0.fVbZMRWFw1VafTo6BjS84QuCDuJ2B4vsWWhZt0zE3iY';
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
-let allPuzzles = [];
 let puzzle, phase, lives, maxLives, hintUsed;
 let allEntities, selectedP1, orderP2, selP2Index;
 let history, gameOver, isDaily, isWon;
-let lastGuessResult = []; // for flash feedback
+let lastGuessResult = [];
 
 // ── DATE UTILS ────────────────────────────────────────────────────────────────
 function getTodayET() {
@@ -397,24 +396,57 @@ function formatDateStr(s) {
 }
 
 // ── SUPABASE ──────────────────────────────────────────────────────────────────
-async function fetchAllPublishedPuzzles() {
+// Only fetches today's puzzle — no bulk load on boot
+async function fetchTodaysPuzzle() {
   const today = getTodayET();
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/puzzles?publish_date=lte.${today}&select=puzzle_number,publish_date,theme,items,decoys,hint,difficulty&order=puzzle_number.asc`,
+    `${SUPABASE_URL}/rest/v1/puzzles?publish_date=eq.${today}&select=puzzle_number,publish_date,theme,items,decoys,hint,difficulty&limit=1`,
     { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } }
   );
-  if (!res.ok) { console.error('Supabase', res.status, await res.text()); return []; }
+  if (!res.ok) { console.error('Supabase', res.status, await res.text()); return null; }
   const rows = await res.json();
-  return rows.map(r => ({
-    id: r.puzzle_number, date: r.publish_date, theme: r.theme,
-    items: r.items, decoys: r.decoys, hint: r.hint || null,
-    difficulty: r.difficulty || null
-  }));
+  if (!rows.length) return null;
+  const r = rows[0];
+  return { id: r.puzzle_number, date: r.publish_date, theme: r.theme, items: r.items, decoys: r.decoys, hint: r.hint || null, difficulty: r.difficulty || null };
 }
 
-function getTodaysPuzzle() {
+// Fetches a single archive puzzle by puzzle_number (for playing old puzzles)
+async function fetchPuzzleById(num) {
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/puzzles?puzzle_number=eq.${num}&select=puzzle_number,publish_date,theme,items,decoys,hint,difficulty&limit=1`,
+    { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } }
+  );
+  if (!res.ok) return null;
+  const rows = await res.json();
+  if (!rows.length) return null;
+  const r = rows[0];
+  return { id: r.puzzle_number, date: r.publish_date, theme: r.theme, items: r.items, decoys: r.decoys, hint: r.hint || null, difficulty: r.difficulty || null };
+}
+
+// Fetches a page of archive rows — lightweight, no items/decoys/hint
+const ARCHIVE_PAGE_SIZE = 10;
+async function fetchArchivePage(page) {
   const today = getTodayET();
-  return allPuzzles.find(p => p.date === today) || allPuzzles[allPuzzles.length - 1] || null;
+  const offset = page * ARCHIVE_PAGE_SIZE;
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/puzzles?publish_date=lte.${today}&select=puzzle_number,publish_date,theme,difficulty&order=puzzle_number.desc&limit=${ARCHIVE_PAGE_SIZE}&offset=${offset}`,
+    { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } }
+  );
+  if (!res.ok) return [];
+  return await res.json();
+}
+
+// Fetches total count of published puzzles (for pagination math)
+async function fetchPuzzleCount() {
+  const today = getTodayET();
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/puzzles?publish_date=lte.${today}&select=puzzle_number`,
+    { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Prefer': 'count=exact', 'Range-Unit': 'items', 'Range': '0-0' } }
+  );
+  const contentRange = res.headers.get('content-range'); // e.g. "0-0/47"
+  if (!contentRange) return 0;
+  const total = parseInt(contentRange.split('/')[1]);
+  return isNaN(total) ? 0 : total;
 }
 
 // ── LOCAL STORAGE ─────────────────────────────────────────────────────────────
@@ -843,29 +875,74 @@ function renderStats() {
 }
 
 // ── ARCHIVE ───────────────────────────────────────────────────────────────────
-function renderArchive() {
-  const completions=getArchiveCompletions(), todayP=getTodaysPuzzle(), list=document.getElementById('archive-list');
-  if (allPuzzles.length===0) { list.innerHTML='<div style="color:var(--muted);font-size:13px;padding:20px 0;text-align:center;">No puzzles yet.</div>'; return; }
-  list.innerHTML='';
-  [...allPuzzles].reverse().forEach(p => {
-    const isToday=todayP&&p.id===todayP.id, status=completions[p.id];
-    const div=document.createElement('div'); div.className='archive-item';
+let archivePage = 0;
+let archiveTotalPages = 1;
+let archiveTodayId = null;
+
+async function renderArchive() {
+  const list = document.getElementById('archive-list');
+  list.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px 0;text-align:center;">Loading…</div>';
+
+  const [rows, total] = await Promise.all([fetchArchivePage(archivePage), fetchPuzzleCount()]);
+  archiveTotalPages = Math.max(1, Math.ceil(total / ARCHIVE_PAGE_SIZE));
+
+  const completions = getArchiveCompletions();
+  list.innerHTML = '';
+
+  if (!rows.length) {
+    list.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px 0;text-align:center;">No puzzles yet.</div>';
+    return;
+  }
+
+  rows.forEach(r => {
+    const p = { id: r.puzzle_number, date: r.publish_date, theme: r.theme, difficulty: r.difficulty || null };
+    const isToday = p.date === getTodayET();
+    if (isToday) archiveTodayId = p.id;
+    const status = completions[p.id];
     const diffHtml = p.difficulty ? `<span class="difficulty-badge ${p.difficulty}" style="font-size:9px;padding:1px 5px;">${p.difficulty}</span>` : '';
-    div.innerHTML=`
+    const div = document.createElement('div'); div.className = 'archive-item';
+    div.innerHTML = `
       <div>
-        <div class="archive-num">#${p.id} ${diffHtml}${isToday?' <span style="color:var(--amber);font-size:9px;letter-spacing:1px;">TODAY</span>':''}</div>
+        <div class="archive-num">#${p.id} ${diffHtml}${isToday ? ' <span style="color:var(--amber);font-size:9px;letter-spacing:1px;">TODAY</span>' : ''}</div>
         <div class="archive-theme">${p.theme}</div>
       </div>
       <div class="archive-right">
         <div class="archive-status">${status==='won'?'🟩':status==='lost'?'🟥':isToday?'▶':'○'}</div>
       </div>`;
-    div.onclick=()=>{
-      if (isToday) { const saved=loadGameState(); if (saved) restoreGame(saved); else initGame(p,true); }
-      else initGame(p,false);
+    div.onclick = async () => {
+      if (isToday) {
+        const saved = loadGameState();
+        if (saved) restoreGame(saved);
+        else {
+          const full = await fetchTodaysPuzzle();
+          if (full) initGame(full, true);
+        }
+      } else {
+        list.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px 0;text-align:center;">Loading puzzle…</div>';
+        const full = await fetchPuzzleById(p.id);
+        if (full) initGame(full, false);
+        else showToast('Could not load that puzzle.');
+      }
       closeAllModals();
     };
     list.appendChild(div);
   });
+
+  // Pagination controls
+  if (archiveTotalPages > 1) {
+    const nav = document.createElement('div');
+    nav.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:14px 0 2px;font-size:12px;color:var(--muted);';
+    nav.innerHTML = `
+      <button onclick="archiveNav(-1)" ${archivePage===0?'disabled':''} style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:7px 14px;border-radius:7px;font-family:monospace;font-size:11px;font-weight:700;cursor:pointer;${archivePage===0?'opacity:0.3;cursor:not-allowed;':''}">← Newer</button>
+      <span>${archivePage+1} / ${archiveTotalPages}</span>
+      <button onclick="archiveNav(1)" ${archivePage>=archiveTotalPages-1?'disabled':''} style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:7px 14px;border-radius:7px;font-family:monospace;font-size:11px;font-weight:700;cursor:pointer;${archivePage>=archiveTotalPages-1?'opacity:0.3;cursor:not-allowed;':''}">Older →</button>`;
+    list.appendChild(nav);
+  }
+}
+
+function archiveNav(dir) {
+  archivePage = Math.max(0, Math.min(archiveTotalPages - 1, archivePage + dir));
+  renderArchive();
 }
 
 // ── TOAST ─────────────────────────────────────────────────────────────────────
@@ -890,7 +967,7 @@ function htpNav(dir) {
 function openModal(id) {
   closeAllModals();
   if (id==='stats-modal') renderStats();
-  if (id==='archive-modal') renderArchive();
+  if (id==='archive-modal') { archivePage = 0; renderArchive(); }
   if (id==='how-modal') { htpPage=0; htpNav(0); markVisited(); }
   document.getElementById(id).classList.add('open');
 }
@@ -902,15 +979,13 @@ document.querySelectorAll('.modal-overlay').forEach(m=>{
 
 // ── BOOT ──────────────────────────────────────────────────────────────────────
 (async function boot() {
-  allPuzzles = await fetchAllPublishedPuzzles();
-  if (allPuzzles.length===0) {
-    document.getElementById('loading-msg').textContent = 'No puzzle available yet — check back soon!';
+  const todayP = await fetchTodaysPuzzle();
+  if (!todayP) {
+    document.getElementById('loading-msg').textContent = 'No puzzle today — check back soon!';
     return;
   }
-  const todayP = getTodaysPuzzle();
-  if (!todayP) { document.getElementById('loading-msg').textContent='No puzzle today — check back soon!'; return; }
   const saved = loadGameState();
-  if (saved && saved.puzzle && saved.puzzle.id===todayP.id) restoreGame(saved);
+  if (saved && saved.puzzle && saved.puzzle.id === todayP.id) restoreGame(saved);
   else initGame(todayP, true);
   setTimeout(maybeShowNewbieTip, 800);
 })();
